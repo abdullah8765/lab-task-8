@@ -1,0 +1,105 @@
+Lab Task-8 
+53639
+Abdullah Ahmed
+CS-3-2
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+// Node structure for the linked list
+struct Node {
+	string name;
+	string sap_id;
+	Node* next;
+};
+
+// Function to create a new node
+Node* createNode(const string& name, const string& sap_id) {
+	Node* newNode = new Node();
+	newNode->name = name;
+	newNode->sap_id = sap_id;
+	newNode->next = nullptr;
+	return newNode;
+}
+
+// Function to insert a new node at the end of the linked list
+void insert(Node*& head, const string& name, const string& sap_id) {
+	Node* newNode = createNode(name, sap_id);
+
+	if (!head) {
+		head = newNode;
+	}
+	else {
+		Node* temp = head;
+		while (temp->next) {
+			temp = temp->next;
+		}
+		temp->next = newNode;
+	}
+}
+
+// Function to delete the node at a specific position
+void deleteNode(Node*& head, int position) {
+	if (!head || position <= 0) return;
+
+	Node* temp = head;
+
+	// If head needs to be removed
+	if (position == 1) {
+		head = temp->next;
+		delete temp;
+		return;
+	}
+
+	// Traverse to the node before the position
+	for (int i = 1; temp != nullptr && i < position - 1; ++i) {
+		temp = temp->next;
+	}
+
+	// If position is out of bounds or next is null
+	if (temp == nullptr || temp->next == nullptr) return;
+
+	Node* next = temp->next->next;
+	delete temp->next;
+	temp->next = next;
+}
+
+// Function to display the linked list
+void display(Node* node) {
+	while (node != nullptr) {
+		cout << "Name: " << node->name << ", SAP ID: " << node->sap_id << endl;
+		node = node->next;
+	}
+}
+
+// Main function
+int main() {
+	Node* head = nullptr;
+	string name, sap_id;
+
+	// Input at least 5 students
+	for (int i = 0; i < 5; ++i) {
+		cout << "Enter name of student " << (i + 1) << ": ";
+		cin >> name;
+
+		cout << "Enter SAP ID of student " << (i + 1) << ": ";
+		cin >> sap_id;
+
+		insert(head, name, sap_id);
+	}
+
+	cout << "\nStudent Records:\n";
+	display(head);
+
+	// Delete the 2nd and 5th student
+	deleteNode(head, 2);
+	deleteNode(head, 4); // Adjusted for deletion after the 2nd node is deleted
+
+	cout << "\nStudent Records after deletion:\n";
+	display(head);
+
+	return 0;
+}
+
+
